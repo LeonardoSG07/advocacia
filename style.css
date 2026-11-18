@@ -1,0 +1,552 @@
+/* ==========================================================
+   STYLE.CSS · Landing page para advogado
+   Índice:
+   01. Variáveis (cores, fontes, sombras)
+   02. Reset e base
+   03. Tipografia
+   04. Layout utilitário e acessibilidade
+   05. Botões
+   06. Header
+   07. Hero
+   08. Áreas de atuação
+   09. Sobre o advogado
+   10. Faixa de CTA
+   11. Passos (como funciona)
+   12. Depoimentos
+   13. FAQ (accordion)
+   14. CTA final
+   15. Rodapé
+   16. Botão flutuante do WhatsApp
+   17. Animação de entrada (reveal)
+   18. Responsividade (breakpoints)
+   19. Acessibilidade: reduzir movimento
+   ========================================================== */
+
+
+/* ==========================================================
+   01. VARIÁVEIS
+   Para trocar a identidade visual, edite apenas este bloco.
+   ========================================================== */
+:root {
+  /* Cores principais */
+  --navy: #0B1F3A;
+  --navy-700: #14305a;
+  --gold: #B8923A;
+  --gold-dark: #8a6a22;
+
+  /* Fundos, textos e bordas */
+  --bg: #F7F5F0;
+  --white: #ffffff;
+  --text: #1c2533;
+  --muted: #4a5568;
+  --line: #e4dfd3;
+
+  /* Verde do WhatsApp (escurecido para manter contraste) */
+  --wa: #1f8f4e;
+
+  /* Forma e sombra */
+  --radius: 14px;
+  --shadow: 0 10px 30px -12px rgba(11, 31, 58, 0.25);
+
+  /* Fontes (com alternativas caso o Google Fonts não carregue) */
+  --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+
+/* ==========================================================
+   02. RESET E BASE
+   ========================================================== */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+/* Rolagem suave; scroll-padding evita que o header fixo cubra o título da seção */
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Imagens nunca estouram o container */
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+
+
+/* ==========================================================
+   03. TIPOGRAFIA
+   Títulos em serifada (Playfair), corpo em Inter
+   ========================================================== */
+h1, h2, h3 {
+  font-family: var(--serif);
+  color: var(--navy);
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+/* clamp(mínimo, ideal, máximo): títulos que escalam conforme a tela */
+h1 { font-size: clamp(2rem, 6vw, 3.4rem); }
+h2 { font-size: clamp(1.7rem, 4.5vw, 2.5rem); }
+h3 { font-size: 1.25rem; }
+
+p { margin: 0 0 1rem; text-wrap: pretty; }
+
+
+/* ==========================================================
+   04. LAYOUT UTILITÁRIO E ACESSIBILIDADE
+   ========================================================== */
+
+/* Container central com largura máxima e margens laterais */
+.container { width: min(1140px, 100% - 2.5rem); margin-inline: auto; }
+
+/* Link "pular para o conteúdo": escondido, aparece ao receber foco do teclado */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--navy);
+  color: var(--white);
+  padding: 0.75rem 1rem;
+  z-index: 100;
+}
+.skip-link:focus { left: 1rem; top: 1rem; }
+
+/* Foco visível em botões e links (navegação por teclado) */
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+
+/* Rótulo pequeno acima dos títulos de seção */
+.eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 0.75rem;
+}
+
+/* Espaçamento vertical padrão entre seções */
+.section { padding: clamp(4rem, 9vw, 6.5rem) 0; }
+
+/* Cabeçalho centralizado de cada seção (eyebrow + título + texto) */
+.section-head { max-width: 680px; margin: 0 auto 3rem; text-align: center; }
+.section-head p { color: var(--muted); }
+
+
+/* ==========================================================
+   05. BOTÕES
+   Base .btn + variações: .btn-wa, .btn-gold, .btn-outline, .btn-sm
+   ========================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  padding: 0.95rem 1.6rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+.btn:hover { transform: translateY(-2px); }
+
+/* Verde WhatsApp (CTA principal) */
+.btn-wa { background: var(--wa); color: var(--white); box-shadow: 0 8px 20px -8px rgba(31, 143, 78, 0.6); }
+.btn-wa:hover { background: #18773f; }
+
+/* Dourado (usado sobre fundo azul-marinho) */
+.btn-gold { background: var(--gold); color: var(--navy); }
+.btn-gold:hover { background: #c9a34a; }
+
+/* Contorno (ação secundária) */
+.btn-outline { border-color: var(--navy); color: var(--navy); background: transparent; }
+.btn-outline:hover { background: var(--navy); color: var(--white); }
+
+/* Tamanho pequeno (header) */
+.btn-sm { padding: 0.6rem 1.1rem; font-size: 0.9rem; }
+
+
+/* ==========================================================
+   06. HEADER
+   Fixo no topo, com efeito de vidro e sombra ao rolar
+   ========================================================== */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  background: rgba(247, 245, 240, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+/* Classe .scrolled é adicionada pelo script.js ao rolar a página */
+.site-header.scrolled { border-color: var(--line); box-shadow: 0 4px 20px -12px rgba(11, 31, 58, 0.25); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 72px; }
+
+/* Logo / marca */
+.brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; }
+.brand-mark {
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--gold);
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.brand-text strong { font-family: var(--serif); color: var(--navy); font-size: 1.05rem; }
+.brand-text span { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.05em; }
+
+/* Menu: escondido no celular (aparece a partir de 900px, ver seção 18) */
+.main-nav { display: none; }
+.main-nav ul { display: flex; gap: 1.75rem; list-style: none; margin: 0; padding: 0; }
+.main-nav a { text-decoration: none; font-size: 0.92rem; font-weight: 500; color: var(--navy); }
+.main-nav a:hover { color: var(--gold-dark); }
+
+/* Botão do header: no celular mostra só o texto curto */
+.header-cta .label-long { display: none; }
+
+
+/* ==========================================================
+   07. HERO
+   ========================================================== */
+.hero { padding: calc(72px + 2.5rem) 0 4rem; position: relative; overflow: hidden; }
+.hero-grid { display: grid; gap: 2.5rem; align-items: center; }
+.hero-copy .lead { font-size: 1.1rem; color: var(--muted); max-width: 560px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; margin: 1.75rem 0 2rem; }
+
+/* Selos de confiança (✓ Resposta no mesmo dia...) */
+.hero-trust { display: flex; flex-wrap: wrap; gap: 1.5rem; list-style: none; padding: 0; margin: 0; }
+.hero-trust li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--navy); font-weight: 500; }
+.hero-trust svg { width: 18px; height: 18px; color: var(--gold-dark); }
+
+/* Foto em formato de arco (topo arredondado) */
+.hero-media { position: relative; }
+.hero-media .photo {
+  border-radius: 200px 200px var(--radius) var(--radius);
+  overflow: hidden;
+  background: var(--navy);
+  aspect-ratio: 4 / 5;
+  box-shadow: var(--shadow);
+}
+.hero-media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Selo flutuante sobre a foto ("15+ anos") */
+.hero-badge {
+  position: absolute;
+  left: -0.5rem;
+  bottom: 1.5rem;
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.1rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 240px;
+}
+.hero-badge strong { font-family: var(--serif); font-size: 1.6rem; color: var(--navy); line-height: 1; }
+.hero-badge span { font-size: 0.8rem; color: var(--muted); line-height: 1.3; }
+
+
+/* ==========================================================
+   08. ÁREAS DE ATUAÇÃO
+   ========================================================== */
+.areas { background: var(--white); }
+.areas-grid { display: grid; gap: 1.25rem; }
+
+/* Card de cada área */
+.card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--gold); }
+
+/* Ícone do card (quadrado azul com ícone dourado) */
+.card-icon {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  display: grid; place-items: center;
+  background: var(--navy);
+  color: var(--gold);
+  margin-bottom: 1.1rem;
+}
+.card-icon svg { width: 26px; height: 26px; }
+.card p { color: var(--muted); font-size: 0.95rem; margin: 0; }
+
+/* CTA abaixo dos cards */
+.areas-cta { text-align: center; margin-top: 2.5rem; }
+
+
+/* ==========================================================
+   09. SOBRE O ADVOGADO
+   ========================================================== */
+.about-grid { display: grid; gap: 2.5rem; align-items: center; }
+.about-media { position: relative; }
+.about-media .photo { border-radius: var(--radius); overflow: hidden; background: var(--navy); aspect-ratio: 4 / 5; box-shadow: var(--shadow); }
+.about-media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Moldura dourada deslocada atrás da foto (detalhe decorativo) */
+.about-media::before {
+  content: "";
+  position: absolute;
+  inset: 1.25rem -1.25rem -1.25rem 1.25rem;
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+  z-index: -1;
+}
+.about-copy .oab { font-size: 0.9rem; color: var(--muted); font-weight: 500; }
+
+/* Lista de diferenciais com bolinha de check */
+.diffs { list-style: none; padding: 0; margin: 1.75rem 0 0; display: grid; gap: 1rem; }
+.diffs li { display: flex; gap: 0.9rem; align-items: flex-start; }
+.diffs .check {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--gold);
+  display: grid; place-items: center;
+  margin-top: 2px;
+}
+.diffs .check svg { width: 15px; height: 15px; }
+.diffs strong { display: block; color: var(--navy); }
+.diffs span { color: var(--muted); font-size: 0.95rem; }
+
+
+/* ==========================================================
+   10. FAIXA DE CTA (meio da página)
+   ========================================================== */
+.band { background: var(--navy); color: #e6e9ef; padding: 3.5rem 0; }
+.band-inner { display: flex; flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+.band h2 { color: var(--white); margin: 0; }
+.band p { margin: 0.5rem 0 0; color: #c9d1de; }
+
+
+/* ==========================================================
+   11. PASSOS (como funciona o atendimento)
+   ========================================================== */
+.steps { display: grid; gap: 1.25rem; counter-reset: step; list-style: none; padding: 0; margin: 0; }
+.step {
+  position: relative;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 2rem 1.75rem 1.75rem;
+}
+/* Número grande dourado (01, 02, 03) */
+.step-num {
+  font-family: var(--serif);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+.step p { color: var(--muted); margin: 0; font-size: 0.95rem; }
+
+
+/* ==========================================================
+   12. DEPOIMENTOS
+   ========================================================== */
+.testimonials { background: var(--white); }
+.t-grid { display: grid; gap: 1.25rem; }
+.t-card {
+  margin: 0;
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 2rem 1.75rem;
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.stars { display: flex; gap: 2px; color: var(--gold); }
+.stars svg { width: 18px; height: 18px; }
+.t-card blockquote { margin: 0; font-size: 1rem; color: var(--text); font-style: italic; }
+
+/* Autor do depoimento (avatar + nome + área) */
+.t-card figcaption { display: flex; align-items: center; gap: 0.75rem; margin-top: auto; }
+.avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--navy); color: var(--gold);
+  display: grid; place-items: center;
+  font-weight: 600; font-size: 0.95rem;
+}
+.t-card figcaption strong { display: block; color: var(--navy); font-size: 0.95rem; }
+.t-card figcaption span { font-size: 0.82rem; color: var(--muted); }
+.t-note { text-align: center; font-size: 0.8rem; color: var(--muted); margin-top: 1.5rem; }
+
+
+/* ==========================================================
+   13. FAQ (accordion)
+   A altura anima via grid-template-rows (0fr → 1fr),
+   sem precisar calcular altura em JavaScript.
+   ========================================================== */
+.faq-list { max-width: 780px; margin: 0 auto; display: grid; gap: 0.85rem; }
+.faq-item { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+
+/* Botão da pergunta */
+.faq-q {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 1.2rem 1.4rem;
+  font: 600 1rem/1.4 var(--sans);
+  color: var(--navy);
+  cursor: pointer;
+}
+
+/* Ícone "+" que gira 45° e vira "×" quando aberto */
+.faq-q .icon {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold);
+  color: var(--gold-dark);
+  display: grid; place-items: center;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.faq-q .icon svg { width: 14px; height: 14px; }
+.faq-q[aria-expanded="true"] .icon { transform: rotate(45deg); background: var(--gold); color: var(--navy); }
+
+/* Resposta: fechada (0fr) por padrão, aberta (1fr) com a classe .open */
+.faq-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s ease; }
+.faq-a > div { overflow: hidden; }
+.faq-a p { padding: 0 1.4rem 1.3rem; margin: 0; color: var(--muted); }
+.faq-item.open .faq-a { grid-template-rows: 1fr; }
+
+
+/* ==========================================================
+   14. CTA FINAL
+   ========================================================== */
+.final-cta {
+  background:
+    linear-gradient(135deg, rgba(11, 31, 58, 0.96), rgba(20, 48, 90, 0.94));
+  color: #e6e9ef;
+  text-align: center;
+}
+.final-cta h2 { color: var(--white); }
+.final-cta p { color: #c9d1de; max-width: 620px; margin: 0 auto 2rem; }
+/* Linha dourada decorativa acima do título */
+.final-cta .divider { width: 60px; height: 2px; background: var(--gold); margin: 0 auto 1.5rem; border: 0; }
+.final-actions { display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
+.final-actions small { color: #aeb8c9; font-size: 0.85rem; }
+
+
+/* ==========================================================
+   15. RODAPÉ
+   (padding-bottom maior no celular para não ficar atrás do botão flutuante)
+   ========================================================== */
+.site-footer { background: #071528; color: #b9c2d0; padding: 3.5rem 0 6rem; font-size: 0.92rem; }
+.footer-grid { display: grid; gap: 2rem; margin-bottom: 2.5rem; }
+.site-footer h3 { color: var(--white); font-size: 1.05rem; margin-bottom: 0.75rem; }
+.site-footer address { font-style: normal; }
+.site-footer a { color: #e4c77e; }
+.site-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; }
+
+/* Aviso legal da OAB */
+.legal { border-top: 1px solid #1d2c45; padding-top: 1.75rem; font-size: 0.8rem; color: #9aa6b8; }
+.legal p { margin-bottom: 0.6rem; }
+
+
+/* ==========================================================
+   16. BOTÃO FLUTUANTE DO WHATSAPP
+   Fixo no canto inferior direito (escondido no desktop, ver seção 18)
+   ========================================================== */
+.wa-float {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 60;
+  width: 58px; height: 58px;
+  border-radius: 50%;
+  background: var(--wa);
+  color: var(--white);
+  display: grid; place-items: center;
+  box-shadow: 0 10px 25px -6px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+.wa-float svg { width: 30px; height: 30px; }
+.wa-float:hover { transform: scale(1.06); }
+
+
+/* ==========================================================
+   17. ANIMAÇÃO DE ENTRADA (reveal)
+   Elementos começam invisíveis e ganham .visible ao entrar na tela
+   (via IntersectionObserver no script.js).
+   .no-js garante que o conteúdo apareça mesmo sem JavaScript.
+   ========================================================== */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.no-js .reveal { opacity: 1; transform: none; }
+
+
+/* ==========================================================
+   18. RESPONSIVIDADE (mobile-first)
+   Os estilos acima valem para celular; aqui só ampliamos
+   para telas maiores.
+   ========================================================== */
+
+/* Tablet pequeno (640px+): 2 colunas de cards e texto completo no botão do header */
+@media (min-width: 640px) {
+  .areas-grid { grid-template-columns: repeat(2, 1fr); }
+  .header-cta .label-long { display: inline; }
+  .header-cta .label-short { display: none; }
+}
+
+/* Desktop (900px+): menu, grids em colunas, sem botão flutuante */
+@media (min-width: 900px) {
+  .main-nav { display: block; }
+  .hero { padding: calc(72px + 4rem) 0 6rem; }
+  .hero-grid { grid-template-columns: 1.15fr 0.85fr; gap: 4rem; }
+
+  /* Grid de 6 colunas: 3 cards na 1ª linha e 2 centralizados na 2ª */
+  .areas-grid { grid-template-columns: repeat(6, 1fr); }
+  .areas-grid .card { grid-column: span 2; }
+  .areas-grid .card:nth-child(4) { grid-column: 2 / span 2; }
+
+  .about-grid { grid-template-columns: 0.9fr 1.1fr; gap: 5rem; }
+  .steps { grid-template-columns: repeat(3, 1fr); }
+  .t-grid { grid-template-columns: repeat(3, 1fr); }
+  .band-inner { flex-direction: row; align-items: center; justify-content: space-between; }
+  .footer-grid { grid-template-columns: 1.4fr 1fr 1fr; }
+  .site-footer { padding-bottom: 2.5rem; }
+  .wa-float { display: none; }
+}
+
+
+/* ==========================================================
+   19. ACESSIBILIDADE: REDUZIR MOVIMENTO
+   Respeita quem desativou animações no sistema operacional
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
