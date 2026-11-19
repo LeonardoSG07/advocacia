@@ -1,12 +1,12 @@
 /* ==========================================================
    STYLE.CSS · Landing page para advogado
    Índice:
-   01. Variáveis (cores, fontes, sombras)
+   01. Variáveis (cores, fontes, sombras) + tema escuro
    02. Reset e base
    03. Tipografia
    04. Layout utilitário e acessibilidade
    05. Botões
-   06. Header
+   06. Header (inclui botão de tema)
    07. Hero
    08. Áreas de atuação
    09. Sobre o advogado
@@ -26,20 +26,35 @@
 /* ==========================================================
    01. VARIÁVEIS
    Para trocar a identidade visual, edite apenas este bloco.
+   O tema claro fica em :root e o escuro em [data-theme="dark"]
+   (o atributo é definido pelo botão de tema, ver script.js).
    ========================================================== */
 :root {
+  color-scheme: light;
+
   /* Cores principais */
   --navy: #0B1F3A;
   --navy-700: #14305a;
   --gold: #B8923A;
-  --gold-dark: #8a6a22;
+  --gold-dark: #7A5C1A;
 
-  /* Fundos, textos e bordas */
-  --bg: #F7F5F0;
-  --white: #ffffff;
+  /* Fundos (tons de areia em toda a página, sem branco) */
+  --bg: #E7DFCE;        /* fundo da página (Hero, Sobre, Atendimento, FAQ) */
+  --surface: #E7DFCE;   /* seções alternadas (Áreas e Depoimentos), um pouco mais escuro */
+  --card: #f0e9d9;      /* cards, passos, FAQ e selo do hero */
+  --white: #ffffff;     /* usado só em textos sobre fundo escuro */
+
+  /* Textos e bordas */
+  --heading: #0B1F3A;   /* títulos e textos de destaque */
   --text: #1c2533;
   --muted: #4a5568;
-  --line: #e4dfd3;
+  --line: #D3CAB4;
+
+  /* Elementos de marca (logo, ícones, avatar, faixa de CTA, header) */
+  --chip: #0B1F3A;
+  --band: #0B1F3A;
+  --header-bg: rgba(241, 233, 215, 0.8);
+  --hero-glow: rgba(189, 142, 32, 0.28);   /* brilho dourado sutil do hero */
 
   /* Verde do WhatsApp (escurecido para manter contraste) */
   --wa: #1f8f4e;
@@ -51,6 +66,30 @@
   /* Fontes (com alternativas caso o Google Fonts não carregue) */
   --serif: "Playfair Display", Georgia, "Times New Roman", serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Tema escuro: só redefine as variáveis que mudam */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #0A1626;
+  --surface: #0F2038;
+  --card: #152A47;
+
+  --heading: #F2EEE3;
+  --text: #E3E7EE;
+  --muted: #A8B3C5;
+  --line: #243A5C;
+
+  --chip: #1B3763;
+  --band: #14305a;
+  --header-bg: rgba(10, 22, 38, 0.9);
+  --hero-glow: rgba(214, 179, 95, 0.14);
+
+  /* Dourado mais claro para manter o contraste sobre fundo escuro */
+  --gold-dark: #D6B35F;
+
+  --shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.6);
 }
 
 
@@ -85,7 +124,7 @@ a { color: inherit; }
    ========================================================== */
 h1, h2, h3 {
   font-family: var(--serif);
-  color: var(--navy);
+  color: var(--heading);
   line-height: 1.2;
   margin: 0 0 0.75rem;
   font-weight: 700;
@@ -171,9 +210,9 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
 .btn-gold { background: var(--gold); color: var(--navy); }
 .btn-gold:hover { background: #c9a34a; }
 
-/* Contorno (ação secundária) */
-.btn-outline { border-color: var(--navy); color: var(--navy); background: transparent; }
-.btn-outline:hover { background: var(--navy); color: var(--white); }
+/* Contorno (ação secundária): acompanha a cor de título do tema */
+.btn-outline { border-color: var(--heading); color: var(--heading); background: transparent; }
+.btn-outline:hover { background: var(--heading); color: var(--bg); }
 
 /* Tamanho pequeno (header) */
 .btn-sm { padding: 0.6rem 1.1rem; font-size: 0.9rem; }
@@ -187,7 +226,7 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 50;
-  background: rgba(247, 245, 240, 0.92);
+  background: var(--header-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid transparent;
@@ -198,26 +237,49 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 72px; }
 
 /* Logo / marca */
-.brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; }
+.brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; min-width: 0; }
 .brand-mark {
   width: 40px; height: 40px;
   display: grid; place-items: center;
+  flex-shrink: 0;
   border-radius: 50%;
-  background: var(--navy);
+  background: var(--chip);
   color: var(--gold);
   font-family: var(--serif);
   font-weight: 700;
   font-size: 1.1rem;
 }
 .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
-.brand-text strong { font-family: var(--serif); color: var(--navy); font-size: 1.05rem; }
+.brand-text strong { font-family: var(--serif); color: var(--heading); font-size: 1.05rem; }
 .brand-text span { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.05em; }
 
 /* Menu: escondido no celular (aparece a partir de 900px, ver seção 18) */
 .main-nav { display: none; }
 .main-nav ul { display: flex; gap: 1.75rem; list-style: none; margin: 0; padding: 0; }
-.main-nav a { text-decoration: none; font-size: 0.92rem; font-weight: 500; color: var(--navy); }
+.main-nav a { text-decoration: none; font-size: 0.92rem; font-weight: 500; color: var(--heading); }
 .main-nav a:hover { color: var(--gold-dark); }
+
+/* Grupo da direita: botão de tema + CTA do WhatsApp */
+.header-actions { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+
+/* Botão de tema claro/escuro (a lógica está no script.js) */
+.theme-toggle {
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--heading);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.theme-toggle:hover { border-color: var(--gold); background: var(--card); }
+.theme-toggle svg { width: 20px; height: 20px; }
+/* Tema claro mostra a lua (clicar ativa o escuro); tema escuro mostra o sol */
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
 
 /* Botão do header: no celular mostra só o texto curto */
 .header-cta .label-long { display: none; }
@@ -226,14 +288,21 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
 /* ==========================================================
    07. HERO
    ========================================================== */
-.hero { padding: calc(72px + 2.5rem) 0 4rem; position: relative; overflow: hidden; }
+/* Brilho dourado suave no canto superior direito (atrás da foto).
+   Para remover o efeito, apague a linha "background" abaixo. */
+.hero {
+  padding: calc(72px + 2.5rem) 0 4rem;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(60% 70% at 85% 10%, var(--hero-glow), transparent 70%);
+}
 .hero-grid { display: grid; gap: 2.5rem; align-items: center; }
 .hero-copy .lead { font-size: 1.1rem; color: var(--muted); max-width: 560px; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; margin: 1.75rem 0 2rem; }
 
 /* Selos de confiança (✓ Resposta no mesmo dia...) */
 .hero-trust { display: flex; flex-wrap: wrap; gap: 1.5rem; list-style: none; padding: 0; margin: 0; }
-.hero-trust li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--navy); font-weight: 500; }
+.hero-trust li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--heading); font-weight: 500; }
 .hero-trust svg { width: 18px; height: 18px; color: var(--gold-dark); }
 
 /* Foto em formato de arco (topo arredondado) */
@@ -252,7 +321,7 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
   position: absolute;
   left: -0.5rem;
   bottom: 1.5rem;
-  background: var(--white);
+  background: var(--card);
   border-radius: var(--radius);
   padding: 0.9rem 1.1rem;
   box-shadow: var(--shadow);
@@ -261,19 +330,19 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
   gap: 0.75rem;
   max-width: 240px;
 }
-.hero-badge strong { font-family: var(--serif); font-size: 1.6rem; color: var(--navy); line-height: 1; }
+.hero-badge strong { font-family: var(--serif); font-size: 1.6rem; color: var(--heading); line-height: 1; }
 .hero-badge span { font-size: 0.8rem; color: var(--muted); line-height: 1.3; }
 
 
 /* ==========================================================
    08. ÁREAS DE ATUAÇÃO
    ========================================================== */
-.areas { background: var(--white); }
+.areas { background: var(--surface); }
 .areas-grid { display: grid; gap: 1.25rem; }
 
 /* Card de cada área */
 .card {
-  background: var(--bg);
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 1.75rem;
@@ -286,7 +355,7 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
   width: 52px; height: 52px;
   border-radius: 12px;
   display: grid; place-items: center;
-  background: var(--navy);
+  background: var(--chip);
   color: var(--gold);
   margin-bottom: 1.1rem;
 }
@@ -323,20 +392,20 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
   flex-shrink: 0;
   width: 28px; height: 28px;
   border-radius: 50%;
-  background: var(--navy);
+  background: var(--chip);
   color: var(--gold);
   display: grid; place-items: center;
   margin-top: 2px;
 }
 .diffs .check svg { width: 15px; height: 15px; }
-.diffs strong { display: block; color: var(--navy); }
+.diffs strong { display: block; color: var(--heading); }
 .diffs span { color: var(--muted); font-size: 0.95rem; }
 
 
 /* ==========================================================
    10. FAIXA DE CTA (meio da página)
    ========================================================== */
-.band { background: var(--navy); color: #e6e9ef; padding: 3.5rem 0; }
+.band { background: var(--band); color: #e6e9ef; padding: 3.5rem 0; }
 .band-inner { display: flex; flex-direction: column; gap: 1.5rem; align-items: flex-start; }
 .band h2 { color: var(--white); margin: 0; }
 .band p { margin: 0.5rem 0 0; color: #c9d1de; }
@@ -348,7 +417,7 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
 .steps { display: grid; gap: 1.25rem; counter-reset: step; list-style: none; padding: 0; margin: 0; }
 .step {
   position: relative;
-  background: var(--white);
+  background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 2rem 1.75rem 1.75rem;
@@ -369,11 +438,11 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
 /* ==========================================================
    12. DEPOIMENTOS
    ========================================================== */
-.testimonials { background: var(--white); }
+.testimonials { background: var(--surface); }
 .t-grid { display: grid; gap: 1.25rem; }
 .t-card {
   margin: 0;
-  background: var(--bg);
+  background: var(--card);
   border-radius: var(--radius);
   padding: 2rem 1.75rem;
   border: 1px solid var(--line);
@@ -389,11 +458,11 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
 .t-card figcaption { display: flex; align-items: center; gap: 0.75rem; margin-top: auto; }
 .avatar {
   width: 44px; height: 44px; border-radius: 50%;
-  background: var(--navy); color: var(--gold);
+  background: var(--chip); color: var(--gold);
   display: grid; place-items: center;
   font-weight: 600; font-size: 0.95rem;
 }
-.t-card figcaption strong { display: block; color: var(--navy); font-size: 0.95rem; }
+.t-card figcaption strong { display: block; color: var(--heading); font-size: 0.95rem; }
 .t-card figcaption span { font-size: 0.82rem; color: var(--muted); }
 .t-note { text-align: center; font-size: 0.8rem; color: var(--muted); margin-top: 1.5rem; }
 
@@ -404,7 +473,7 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
    sem precisar calcular altura em JavaScript.
    ========================================================== */
 .faq-list { max-width: 780px; margin: 0 auto; display: grid; gap: 0.85rem; }
-.faq-item { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.faq-item { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
 
 /* Botão da pergunta */
 .faq-q {
@@ -418,7 +487,7 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
   border: 0;
   padding: 1.2rem 1.4rem;
   font: 600 1rem/1.4 var(--sans);
-  color: var(--navy);
+  color: var(--heading);
   cursor: pointer;
 }
 
@@ -510,8 +579,15 @@ p { margin: 0 0 1rem; text-wrap: pretty; }
 /* ==========================================================
    18. RESPONSIVIDADE (mobile-first)
    Os estilos acima valem para celular; aqui só ampliamos
-   para telas maiores.
+   para telas maiores (e enxugamos o header em telas bem pequenas).
    ========================================================== */
+
+/* Celular pequeno (até 479px): libera espaço no header para o botão de tema */
+@media (max-width: 479px) {
+  .brand-text span { display: none; }
+  .brand-text strong { font-size: 0.95rem; }
+  .header-actions { gap: 0.45rem; }
+}
 
 /* Tablet pequeno (640px+): 2 colunas de cards e texto completo no botão do header */
 @media (min-width: 640px) {

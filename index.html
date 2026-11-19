@@ -8,6 +8,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- ==========================================================
+       TEMA CLARO/ESCURO (aplicação inicial)
+       Roda antes da página aparecer para evitar "piscar" de tema.
+       Usa a escolha salva pelo visitante; sem escolha, abre no claro.
+       O botão que alterna o tema está no script.js.
+       ========================================================== -->
+  <script>
+    (function () {
+      var theme = "light";
+      try {
+        var saved = localStorage.getItem("theme");
+        if (saved === "dark" || saved === "light") theme = saved;
+      } catch (e) {}
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+
+  <!-- ==========================================================
        SEO: título, descrição, cor do navegador e URL canônica
        (trocar pelo domínio real do cliente)
        ========================================================== -->
@@ -101,6 +118,10 @@
     <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
     <!-- Ícone de estrela (avaliações) -->
     <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5l2.94 5.96 6.56.95-4.75 4.63 1.12 6.54L12 17.5l-5.87 3.08 1.12-6.54L2.5 9.41l6.56-.95z"/></symbol>
+    <!-- Ícone de lua (botão de tema, tema claro ativo) -->
+    <symbol id="i-moon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <!-- Ícone de sol (botão de tema, tema escuro ativo) -->
+    <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></g></symbol>
     <!-- Ícone de mais (+) usado no FAQ -->
     <symbol id="i-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
   </svg>
@@ -131,12 +152,21 @@
           <li><a href="#faq">Dúvidas</a></li>
         </ul>
       </nav>
+      <!-- Ações do header: botão de tema + CTA do WhatsApp -->
+      <div class="header-actions">
+      <!-- Botão de tema: alterna claro/escuro (lógica no script.js).
+           Mostra a lua no tema claro e o sol no tema escuro. -->
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ativar tema escuro" aria-pressed="false">
+        <svg class="icon-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+        <svg class="icon-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+      </button>
       <!-- CTA do header: texto curto no celular, texto longo no desktop -->
       <a class="btn btn-wa btn-sm header-cta" href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20gostaria%20de%20uma%20orienta%C3%A7%C3%A3o%20jur%C3%ADdica" target="_blank" rel="noopener noreferrer">
         <svg aria-hidden="true"><use href="#i-wa"/></svg>
         <span class="label-short">WhatsApp</span>
         <span class="label-long">Falar no WhatsApp</span>
       </a>
+      </div>
     </div>
   </header>
 

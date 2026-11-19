@@ -6,6 +6,7 @@
    3. Animação de entrada dos elementos (reveal)
    4. FAQ em accordion
    5. Ano atual no rodapé
+   6. Tema claro / escuro
    ========================================================== */
 
 /* Tudo dentro de uma função auto-executável (IIFE):
@@ -108,5 +109,39 @@
      ======================================================== */
   var year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
+
+
+  /* ========================================================
+     6. TEMA CLARO / ESCURO
+     O tema inicial já é aplicado por um mini-script no <head>
+     do HTML (evita "piscar"). Aqui ficam o clique do botão, a
+     gravação da escolha (localStorage) e os textos de
+     acessibilidade do botão.
+     ======================================================== */
+  var themeBtn = document.getElementById("theme-toggle");
+  var themeMeta = document.querySelector('meta[name="theme-color"]');
+
+  // Aplica o tema e sincroniza botão, leitores de tela e cor da barra do navegador
+  function applyTheme(theme) {
+    var isDark = theme === "dark";
+    document.documentElement.setAttribute("data-theme", theme);
+    if (themeBtn) {
+      themeBtn.setAttribute("aria-pressed", String(isDark));
+      themeBtn.setAttribute("aria-label", isDark ? "Ativar tema claro" : "Ativar tema escuro");
+    }
+    if (themeMeta) themeMeta.setAttribute("content", isDark ? "#0A1626" : "#0B1F3A");
+  }
+
+  // Sincroniza com o tema que o <head> já aplicou
+  applyTheme(document.documentElement.getAttribute("data-theme") || "light");
+
+  if (themeBtn) {
+    themeBtn.addEventListener("click", function () {
+      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(next);
+      // try/catch: o localStorage pode estar bloqueado (ex.: aba anônima)
+      try { localStorage.setItem("theme", next); } catch (e) {}
+    });
+  }
 
 })();
